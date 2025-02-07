@@ -2,9 +2,10 @@ import { Console } from "@woowacourse/mission-utils";
 
 class StringCalculator {
   static add(numbers) {
-    const delimiters = [',', ':'];  // 기본 구분자 설정
+    const { customDelimiter, input } = this.extractCustomDelimiter(numbers);
+    const delimiters = [',', ':', customDelimiter].filter(Boolean); // customDelimiter = null이면 delimiters에 포함되지 않음 
 
-    let numArray = [numbers];   
+    let numArray = [input];   
     for (const delimiter of delimiters) {
       let tempArray = [];
       for (const number of numArray) {
@@ -18,6 +19,18 @@ class StringCalculator {
     });
 
     return numArray.reduce((sum, num) => sum + num, 0);  // 합산하여 반환
+  }
+
+  static extractCustomDelimiter(numbers) {
+    if (numbers.startsWith('//')) {                     // startsWith : 문자열이 //로 시작하는지 확인 
+      const linebreakIndex = numbers.indexOf('\\n');    // indexOf : 찾은 문자 위치 반환, 찾지 못하면 -1 반환 
+      if (linebreakIndex !== -1) {                    
+        const customDelimiter = numbers.slice(2, linebreakIndex);
+        const input = numbers.slice(linebreakIndex + 2); // 커스텀 지정자 뒤부터 자르기
+        return { customDelimiter, input };
+      }
+    }
+    return {customDelimiter: null, input: numbers };  // 예외처리 : 커스텀이 없는 경우
   }
 }
 
