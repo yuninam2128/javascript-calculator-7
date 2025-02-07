@@ -12,8 +12,12 @@ class StringCalculator {
       }
       numArray = tempArray;
     }
+    numArray = numArray.map(num => {
+      const numValue = Number(num);  // 숫자로 변환
+      return numValue;
+    });
 
-    return numArray;
+    return numArray.reduce((sum, num) => sum + num, 0);  // 합산하여 반환
   }
 }
 
